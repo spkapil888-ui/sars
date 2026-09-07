@@ -4,12 +4,13 @@
   "private": true,
   "description": "Next.js App Router rebuild of the SARS Global website.",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3000 -H 0.0.0.0",
     "prebuild": "node scripts/clean-build-cache.mjs",
     "build": "next build",
     "start": "next start",
     "pretypecheck": "node scripts/clean-build-cache.mjs",
     "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
     "validate": "node scripts/validate.mjs",
     "audit:pages": "node scripts/audit-pages.mjs"
   },

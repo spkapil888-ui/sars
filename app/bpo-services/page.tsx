@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BodyClass } from "@/components/layout/BodyClass";
 import { BpoEngagementSwitcher } from "@/components/bpo/BpoEngagementSwitcher";
+import { BpoFaqAccordion } from "@/components/bpo/BpoFaqAccordion";
 import { StructuredData } from "@/components/ui/StructuredData";
 import { makePageMetadata } from "@/content/metadata";
 import { getPageByRoute } from "@/content/pages";
@@ -449,14 +450,7 @@ export default function Page() {
                 </div>
                 <p>Here are the practical details businesses usually need before handing over customer or operations work.</p>
               </div>
-              <div className="sars-bpo-faq__list">
-                {faqs.map(([question, answer], index) => (
-                  <details className="sars-bpo-page__reveal" key={question} open={index === 0}>
-                    <summary>{question}</summary>
-                    <p>{answer}</p>
-                  </details>
-                ))}
-              </div>
+              <BpoFaqAccordion faqs={faqs} />
             </div>
           </section>
 

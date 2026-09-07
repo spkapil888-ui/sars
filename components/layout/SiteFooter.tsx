@@ -22,23 +22,6 @@ const services = [
   { label: "Business Process Outsourcing", href: "/bpo-services/" },
 ];
 
-const offices = [
-  {
-    label: "Main Office — Alwar",
-    address:
-      "Plot No. 43, Scheme No. 02, Vijay Commercial Complex, Bhagat Singh Circle, near Jai Marg, Alwar, Rajasthan 301001",
-  },
-  {
-    label: "Gurugram Office",
-    address:
-      "402, 2nd Floor, Pink Town House Market, Opp. U-25/12 Road, DLF Phase III, Nathupur, Sector 24, Gurugram, Haryana 122002",
-  },
-];
-
-function mapsHref(address: string) {
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-}
-
 export function SiteFooter() {
   return (
     <footer className="sars-footer">
@@ -53,17 +36,6 @@ export function SiteFooter() {
           <p>
             <a href="mailto:business@sarsglobal.io">business@sarsglobal.io</a>
           </p>
-          <div className="sars-footer__offices" aria-label="SARS Global office locations">
-            {offices.map((office) => (
-              <address className="sars-footer__address" key={office.label}>
-                <strong>{office.label}</strong>
-                <span>{office.address}</span>
-                <a href={mapsHref(office.address)} target="_blank" rel="noopener noreferrer">
-                  View on Google Maps →
-                </a>
-              </address>
-            ))}
-          </div>
         </div>
 
         <nav aria-label="Footer navigation links">

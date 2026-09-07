@@ -38,7 +38,7 @@
 
 .sars-hire-page__section--orange {
   background: #f57e20;
-  color: var(--hire-black);
+  color: var(--hire-white);
 }
 
 .sars-hire-page__section--white {
@@ -96,7 +96,17 @@
 
 .sars-hire-page__section--orange .sars-hire-page__heading em,
 .sars-hire-page__hero .sars-hire-page__title em {
+  color: var(--hire-black);
+}
+
+.sars-hire-page__section--orange .sars-hire-page__eyebrow,
+.sars-hire-page__section--orange .sars-hire-page__heading {
   color: var(--hire-white);
+}
+
+.sars-hire-page__section--orange .sars-hire-page__eyebrow::before {
+  background: var(--hire-white);
+  opacity: 0.62;
 }
 
 .sars-hire-page__copy {
@@ -109,7 +119,7 @@
 
 .sars-hire-page__section--orange .sars-hire-page__copy,
 .sars-hire-page__hero .sars-hire-page__copy {
-  color: rgba(8, 8, 8, 0.72);
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .sars-hire-page__hero .sars-hire-page__copy {
@@ -181,16 +191,49 @@
   letter-spacing: 0;
 }
 
-.sars-hire-page__title span {
+.sars-hire-page__title > span {
   display: block;
 }
 
-.sars-hire-page__hero .sars-hire-page__title span {
+.sars-hire-page__hero .sars-hire-page__title > span {
   color: var(--hire-white);
 }
 
-.sars-hire-page__hero .sars-hire-page__title span:nth-child(2) {
+.sars-hire-page__hero .sars-hire-page__title > span:nth-child(2) {
   color: var(--hire-black);
+}
+
+.sars-hire-page__title-typing-line {
+  display: inline-flex !important;
+  align-items: baseline;
+  color: var(--hire-black) !important;
+  white-space: nowrap;
+  min-height: 1.02em;
+  line-height: inherit;
+}
+
+.sars-hire-typing-text {
+  display: inline !important;
+  color: var(--hire-black) !important;
+  white-space: nowrap;
+}
+
+.sars-hire-typing-cursor {
+  display: inline-block !important;
+  color: var(--hire-black) !important;
+  font-weight: 300;
+  margin-left: 2px;
+  line-height: 1;
+  animation: sarsBlinkCursor 0.85s step-start infinite;
+}
+
+@keyframes sarsBlinkCursor {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .sars-hire-page__rotator {
@@ -235,8 +278,8 @@
   justify-content: center;
   min-height: 50px;
   padding: 0 24px;
-  border: 1px solid rgba(8, 8, 8, 0.18);
-  border-radius: 14px;
+  border: 1px solid rgba(8, 8, 8, 0.12);
+  border-radius: 13px;
   background: var(--hire-white);
   color: var(--hire-black);
   box-shadow: 0 10px 28px rgba(75, 22, 0, 0.12);
@@ -271,6 +314,23 @@
   color: var(--hire-black);
 }
 
+.sars-hire-page__hero .sars-hire-page__button,
+.sars-hire-page__hero .sars-hire-page__button--light {
+  min-height: 48px;
+  padding: 0 22px;
+  border-color: rgba(8, 8, 8, 0.14);
+  border-radius: 12px;
+  background: var(--hire-white);
+  color: var(--hire-black);
+  box-shadow: 0 12px 28px rgba(65, 21, 0, 0.13);
+}
+
+.sars-hire-page__hero .sars-hire-page__button:hover,
+.sars-hire-page__hero .sars-hire-page__button:focus-visible {
+  background: var(--hire-black);
+  color: var(--hire-white);
+}
+
 .sars-hire-page__stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -300,7 +360,7 @@
 .sars-hire-page__stat span {
   display: block;
   margin-top: 8px;
-  color: rgba(8, 8, 8, 0.68);
+  color: rgba(8, 8, 8, 0.72);
   font-size: 0.92rem;
   font-weight: 700;
 }
@@ -427,16 +487,16 @@
   gap: 12px;
   align-items: center;
   padding: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(8, 8, 8, 0.9);
+  border-radius: 15px;
+  background: #15100c;
   transition: transform 240ms ease, border-color 240ms ease, background 240ms ease;
 }
 
 .sars-hire-page__candidate:hover {
   transform: translateY(-2px);
   border-color: rgba(245, 126, 32, 0.46);
-  background: rgba(255, 255, 255, 0.09);
+  background: #1c1510;
 }
 
 .sars-hire-page__avatar {
@@ -462,7 +522,7 @@
 
 .sars-hire-page__candidate p {
   margin-top: 3px;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.86rem;
 }
 
@@ -487,10 +547,10 @@
   display: flex;
   gap: 12px;
   align-items: center;
-  padding: 16px;
-  border-radius: 20px;
-  background: var(--hire-white);
-  color: var(--hire-black);
+  padding: 15px 16px;
+  border-radius: 16px;
+  background: var(--hire-orange);
+  color: var(--hire-white);
 }
 
 .sars-hire-page__scheduled span {
@@ -499,7 +559,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: var(--hire-orange);
+  background: var(--hire-black);
   font-weight: 700;
 }
 
@@ -510,7 +570,7 @@
 
 .sars-hire-page__scheduled small {
   margin-top: 2px;
-  color: rgba(8, 8, 8, 0.62);
+  color: rgba(255, 255, 255, 0.82);
   font-weight: 700;
 }
 
@@ -702,6 +762,12 @@
   display: grid;
   gap: 12px;
   padding: 22px;
+}
+
+.sars-hire-page__section--orange .sars-hire-page__feature-card {
+  border-color: rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 52px rgba(86, 28, 0, 0.14);
 }
 
 .sars-hire-page__feature-card span {
@@ -1018,12 +1084,14 @@
 
 .sars-hire-page__metric-card {
   padding: clamp(22px, 3vw, 34px);
-  background: rgba(255, 255, 255, 0.68);
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 52px rgba(86, 28, 0, 0.14);
 }
 
 .sars-hire-page__metric-card strong {
   display: block;
-  color: var(--hire-black);
+  color: var(--hire-orange);
   font-family: var(--sars-heading-font, "Raleway", system-ui, sans-serif);
   font-size: clamp(2.4rem, 5vw, 4.7rem);
   line-height: 1;
@@ -1043,23 +1111,174 @@
 }
 
 .sars-hire-page__global {
-  display: grid;
-  grid-template-columns: minmax(0, 0.72fr) minmax(320px, 1fr);
-  gap: clamp(24px, 5vw, 76px);
-  align-items: center;
-  margin-top: clamp(42px, 7vw, 86px);
-  padding: clamp(24px, 4vw, 42px);
-  border: 1px solid rgba(8, 8, 8, 0.14);
+  display: block;
+  width: 100%;
+  margin-top: 0;
+  padding: clamp(28px, 4.5vw, 54px);
+  border: 1px solid rgba(255, 255, 255, 0.38);
   border-radius: 34px;
-  background: rgba(255, 255, 255, 0.72);
+  background: #ffffff;
+  box-shadow: 0 18px 52px rgba(86, 28, 0, 0.14);
 }
 
-.sars-hire-page__global h3 {
-  margin: 0;
-  color: var(--hire-black);
+.sars-hire-page__global-header {
+  max-width: 840px;
+  margin-bottom: clamp(24px, 3.5vw, 38px);
+}
+
+.sars-hire-page__global-tag {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(245, 126, 32, 0.12);
+  color: var(--hire-orange, #f57e20);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sars-hire-page__global h3,
+.sars-hire-page__global-title {
+  margin: 0 0 16px;
+  color: #000000 !important;
   font-family: var(--sars-heading-font, "Raleway", system-ui, sans-serif);
-  font-size: clamp(1.8rem, 3.4vw, 3.1rem);
-  line-height: 1.05;
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+/* User explicitly requested: and this text make a black color */
+.sars-hire-page__global-copy,
+.sars-hire-page__global .sars-hire-page__copy {
+  margin: 0;
+  color: #000000 !important;
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.6;
+  max-width: 820px;
+}
+
+.sars-hire-page__countries-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.sars-hire-page__country-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: #fbf8f4;
+  border: 1px solid rgba(23, 18, 15, 0.08);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.sars-hire-page__country-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 126, 32, 0.35);
+  box-shadow: 0 10px 24px rgba(245, 126, 32, 0.08);
+}
+
+.sars-hire-page__country-flag-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sars-hire-page__country-flag {
+  font-size: 1.75rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.sars-hire-page__country-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sars-hire-page__country-name {
+  color: #000000;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.sars-hire-page__country-tz {
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.sars-hire-page__country-hubs {
+  color: #17120f;
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+
+.sars-hire-page__country-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #0f8b44;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sars-hire-page__country-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #0f8b44;
+  box-shadow: 0 0 0 3px rgba(15, 139, 68, 0.2);
+}
+
+.sars-hire-page__global-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 32px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(23, 18, 15, 0.08);
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.sars-hire-page__global-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.sars-hire-page__global-stat strong {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--hire-orange, #f57e20);
+  font-family: var(--sars-heading-font, "Raleway", system-ui, sans-serif);
+}
+
+.sars-hire-page__global-stat span {
+  color: #111111;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sars-hire-page__global-stat-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(23, 18, 15, 0.12);
 }
 
 .sars-hire-page__countries {
@@ -1076,33 +1295,6 @@
   color: var(--hire-black);
   font-weight: 700;
 }
-
-.sars-hire-page__map {
-  position: relative;
-  min-height: 270px;
-  border-radius: 28px;
-  background-color: var(--hire-black);
-  background-image: radial-gradient(rgba(245, 126, 32, 0.9) 1.8px, transparent 2px);
-  background-size: 22px 22px;
-  overflow: hidden;
-}
-
-.sars-hire-page__map span {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border: 3px solid var(--hire-orange);
-  border-radius: 50%;
-  background: var(--hire-white);
-  box-shadow: 0 0 0 8px rgba(245, 126, 32, 0.18);
-}
-
-.sars-hire-page__map span:nth-child(1) { top: 34%; left: 18%; }
-.sars-hire-page__map span:nth-child(2) { top: 24%; left: 44%; }
-.sars-hire-page__map span:nth-child(3) { top: 44%; left: 58%; }
-.sars-hire-page__map span:nth-child(4) { top: 54%; left: 70%; }
-.sars-hire-page__map span:nth-child(5) { top: 28%; left: 76%; }
-.sars-hire-page__map span:nth-child(6) { top: 62%; left: 36%; }
 
 .sars-hire-page__testimonial-layout {
   display: grid;
@@ -1392,7 +1584,7 @@
   margin-top: 8px;
   border-color: transparent;
   border-radius: 12px;
-  background: linear-gradient(90deg, #f57e20, var(--hire-orange));
+  background: var(--hire-orange);
   color: var(--hire-white);
 }
 
@@ -1514,12 +1706,15 @@
   .sars-hire-page__section-head,
   .sars-hire-page__hero-grid,
   .sars-hire-page__ai-layout,
-  .sars-hire-page__global,
   .sars-hire-page__testimonial-layout,
   .sars-hire-page__lead,
   .sars-hire-page__roles-layout,
   .sars-hire-page__faq {
     grid-template-columns: 1fr;
+  }
+
+  .sars-hire-page__countries-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .sars-hire-page__card-grid,
@@ -1618,8 +1813,19 @@
     padding: 12px 14px;
   }
 
-  .sars-hire-page__map {
-    min-height: 220px;
+  .sars-hire-page__countries-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .sars-hire-page__global-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .sars-hire-page__global-stat-divider {
+    display: none;
   }
 
   .sars-hire-page__faq details p {

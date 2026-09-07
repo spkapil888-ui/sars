@@ -585,8 +585,14 @@ export const PAGES = {
   }
 } as const satisfies Record<string, PageRecord>;
 
+import { getNewBlogPageByRoute } from "./newBlogs";
+
 export function getPageByRoute(route: string): PageRecord {
   const normalized = route !== "/" ? route.replace(/\/$/, "") : route;
+  const newBlog = getNewBlogPageByRoute(normalized);
+  if (newBlog) {
+    return newBlog;
+  }
   const page = PAGES[normalized as keyof typeof PAGES];
   if (!page) {
     throw new Error(`Missing page content for route: ${route}`);

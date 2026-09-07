@@ -270,14 +270,14 @@ svg {
   color: var(--sars-black);
 }
 
-.sars-portfolio-page .sars-footer {
+.sars-footer {
   background: var(--sars-cream);
   color: var(--sars-ink);
   border-top: 1px solid rgba(245, 126, 32, 0.22);
 }
 
-.sars-portfolio-page .sars-footer h2,
-.sars-portfolio-page .sars-footer h3 {
+.sars-footer h2,
+.sars-footer h3 {
   margin: 0 0 16px;
   color: inherit;
   font-size: 1rem;
@@ -285,13 +285,35 @@ svg {
   line-height: 1.2;
 }
 
-.sars-portfolio-page .sars-footer ul,
-.sars-portfolio-page .sars-footer__bottom {
+.sars-footer ul,
+.sars-footer__bottom {
   color: var(--sars-muted);
 }
 
-.sars-portfolio-page .sars-footer__bottom {
+.sars-footer__bottom {
   border-top-color: rgba(23, 18, 15, 0.12);
+}
+
+.sars-footer a {
+  display: inline;
+  min-width: 0;
+  min-height: 0;
+  line-height: inherit;
+  color: inherit;
+  transition: color 200ms ease;
+}
+
+.sars-footer a:hover,
+.sars-footer a:focus-visible {
+  color: var(--sars-orange-dark);
+}
+
+.sars-footer ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .sars-service-hero__media--plain {

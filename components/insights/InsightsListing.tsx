@@ -32,11 +32,11 @@ function ArticleVisual({ post, priority = false }: { post: (typeof BLOG_POSTS)[n
 
 export function InsightsListing() {
   const [activeCategory, setActiveCategory] = useState("All");
-  const featured = BLOG_POSTS[0];
   const filteredPosts = useMemo(() => {
     return BLOG_POSTS.filter((post) => activeCategory === "All" || post.category === activeCategory);
   }, [activeCategory]);
-  const gridPosts = filteredPosts.filter((post) => post.slug !== featured.slug);
+  const featured = filteredPosts[0];
+  const gridPosts = filteredPosts.slice(1);
 
   return (
     <main id="main" className="sars-next-insights">

@@ -6854,14 +6854,10 @@ body:has(.sars-service-hero) .sars-nav__links a,
 body:has(.sars-about-redesign-hero) .sars-nav__links a,
 body:has(.sars-service-hero) .sars-text-link,
 body:has(.sars-about-redesign-hero) .sars-text-link,
-body:has(.sars-service-hero) .sars-footer a,
-body:has(.sars-about-redesign-hero) .sars-footer a,
 .sars-services-page .sars-nav__links a,
 .sars-about-page .sars-nav__links a,
 .sars-services-page .sars-text-link,
-.sars-about-page .sars-text-link,
-.sars-services-page .sars-footer a,
-.sars-about-page .sars-footer a {
+.sars-about-page .sars-text-link {
   display: inline-flex;
   align-items: center;
   min-width: 44px;

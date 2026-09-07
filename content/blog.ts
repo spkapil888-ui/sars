@@ -1,6 +1,7 @@
 import type { BlogPost } from "./pages";
+import { NEW_BLOG_POSTS } from "./newBlogs";
 
-export const BLOG_POSTS = [
+const EXISTING_BLOG_POSTS = [
     {
       "slug": "ai-visibility-measure-brand-chatgpt-gemini-google-ai-search-2026",
       "category": "AI Search Optimization",
@@ -134,6 +135,12 @@ export const BLOG_POSTS = [
       "visualLabel": "WY"
     }
   ] as const satisfies readonly BlogPost[];
+
+export const BLOG_POSTS: readonly BlogPost[] = [
+  ...NEW_BLOG_POSTS,
+  ...EXISTING_BLOG_POSTS,
+];
+
 export const BLOG_CATEGORIES = [
   "All",
   "AI Search Optimization",
