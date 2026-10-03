@@ -10,6 +10,9 @@ import "./styles/hire-talent.css";
 import "./styles/bpo-services.css";
 import "./globals.css";
 
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-MBKB7X6G6Q";
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://sarsglobal.io"),
   title: {
@@ -22,6 +25,9 @@ export const metadata: Metadata = {
     icon: "/assets/img/sars-new-logo.png",
     shortcut: "/assets/img/sars-new-logo.png",
     apple: "/assets/img/sars-new-logo.png",
+  },
+  verification: {
+    google: googleSiteVerification || undefined,
   },
   robots: {
     index: true,
@@ -37,6 +43,24 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${dmSans.variable} ${raleway.variable}`}>
+      <head>
+        {/* Google tag (gtag.js) */}
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${gaMeasurementId}');
+            `,
+          }}
+        />
+      </head>
       <body className="sars-page">
         <a className="sars-skip" href="#main">
           Skip to content

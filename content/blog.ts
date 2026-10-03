@@ -1,5 +1,8 @@
 import type { BlogPost } from "./pages";
 import { NEW_BLOG_POSTS } from "./newBlogs";
+import { SEO_BLOG_POSTS } from "./seoBlogs";
+import { SEPTEMBER_BLOG_POSTS } from "./septemberBlogs";
+import { OCTOBER_BLOG_POSTS } from "./octoberBlogs";
 
 const EXISTING_BLOG_POSTS = [
     {
@@ -137,9 +140,12 @@ const EXISTING_BLOG_POSTS = [
   ] as const satisfies readonly BlogPost[];
 
 export const BLOG_POSTS: readonly BlogPost[] = [
+  ...OCTOBER_BLOG_POSTS,
+  ...SEPTEMBER_BLOG_POSTS,
+  ...SEO_BLOG_POSTS,
   ...NEW_BLOG_POSTS,
   ...EXISTING_BLOG_POSTS,
-];
+].sort((a, b) => new Date(b.published).getTime() - new Date(a.published).getTime());
 
 export const BLOG_CATEGORIES = [
   "All",
@@ -148,7 +154,9 @@ export const BLOG_CATEGORIES = [
   "Digital Marketing",
   "Technology Consulting",
   "Website Development",
-  "AI & Automation"
+  "AI & Automation",
+  "BPO Services",
+  "Talent Solutions"
 ] as const;
 
 export function getBlogBySlug(slug: string): BlogPost | undefined {

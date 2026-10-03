@@ -22,7 +22,7 @@ export function ClientScripts() {
 
   return (
     <>
-      <Script src="/assets/js/main.js?v=20260822a" type="module" strategy="afterInteractive" />
+      <Script src="/assets/js/main.js?v=20260908b" type="module" strategy="afterInteractive" />
       <Script src="/assets/js/hire-talent.js?v=20260820a" type="module" strategy="afterInteractive" />
       <Script src="/assets/js/bpo-services.js?v=20260820a" type="module" strategy="afterInteractive" />
     </>

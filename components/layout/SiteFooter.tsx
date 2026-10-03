@@ -1,28 +1,46 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navigation = [
-  { label: "What We Do", href: "/services/" },
+  { label: "Services", href: "/services/" },
   { label: "About Us", href: "/about/" },
   { label: "Work", href: "/work/" },
   { label: "Portfolio", href: "/portfolio/" },
   { label: "Hire Talent", href: "/hire-talent/" },
-  { label: "BPO Services", href: "/bpo-services/" },
   { label: "Insights", href: "/insights/" },
+  { label: "Locations", href: "/locations/" },
   { label: "Contact", href: "/contact/" },
 ];
 
-const services = [
-  { label: "Digital Marketing", href: "/services/#digital-marketing" },
-  { label: "Creative Production", href: "/services/#creative-production" },
-  { label: "UI/UX & Product Design", href: "/services/#ui-ux-product-design" },
-  { label: "Software Development", href: "/services/#software-development" },
-  { label: "AI Automation", href: "/services/#ai-automation" },
-  { label: "Technology Consulting", href: "/services/#technology-consulting" },
-  { label: "Business Process Outsourcing", href: "/bpo-services/" },
+const whatWeDo = [
+  { label: "Digital Marketing", href: "/digital-marketing" },
+  { label: "AI & Automation", href: "/ai-automation" },
+  { label: "Software Development", href: "/software-development" },
+  { label: "UI/UX Design", href: "/ui-ux-design" },
+  { label: "Technology Consulting", href: "/technology-consulting" },
+  { label: "BPO Services", href: "/bpo-services/" },
+];
+
+const industriesWeServe = [
+  { label: "Healthcare", href: "/industries/healthcare" },
+  { label: "B2B SaaS", href: "/industries/b2b-saas" },
+  { label: "B2B Lead Generation", href: "/industries/b2b-lead-generation" },
+  { label: "Automotive", href: "/industries/automotive" },
+  { label: "Real Estate", href: "/industries/real-estate" },
+  { label: "Education", href: "/industries/education" },
+  { label: "Agritech", href: "/industries/agritech" },
+  { label: "All Industries", href: "/industries/" },
 ];
 
 export function SiteFooter() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/industries")) {
+    return null;
+  }
+
   return (
     <footer className="sars-footer">
       <div className="sars-footer__grid">
@@ -50,9 +68,20 @@ export function SiteFooter() {
         </nav>
 
         <nav aria-label="Footer service links">
-          <h3>Services</h3>
+          <h3>What We Do</h3>
           <ul>
-            {services.map((item) => (
+            {whatWeDo.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href}>{item.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav aria-label="Footer industry links">
+          <h3>Industries We Serve</h3>
+          <ul>
+            {industriesWeServe.map((item) => (
               <li key={item.href}>
                 <Link href={item.href}>{item.label}</Link>
               </li>

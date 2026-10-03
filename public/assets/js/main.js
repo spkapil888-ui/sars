@@ -392,7 +392,9 @@ function initPreloader() {
   const bar = preloader.querySelector("[data-preloader-bar]");
   const count = preloader.querySelector("[data-preloader-count]");
 
-  if (reducedMotion) {
+  const alreadyLoaded = typeof sessionStorage !== "undefined" && sessionStorage.getItem("sars_preloaded");
+
+  if (reducedMotion || alreadyLoaded) {
     preloader.classList.add("is-done");
     document.body.classList.remove("is-loading");
     return;
@@ -400,7 +402,7 @@ function initPreloader() {
 
   document.body.classList.add("is-loading");
   let start = null;
-  const duration = 2920;
+  const duration = 580;
 
   function tick(time) {
     if (!start) start = time;
@@ -416,7 +418,10 @@ function initPreloader() {
     window.setTimeout(() => {
       preloader.classList.add("is-done");
       document.body.classList.remove("is-loading");
-    }, 110);
+      try {
+        sessionStorage.setItem("sars_preloaded", "1");
+      } catch (_) {}
+    }, 80);
   }
 
   requestAnimationFrame(tick);
@@ -787,6 +792,10 @@ function initManifesto() {
     const activeIndex = clamp(Math.floor(progress * lines.length), 0, lines.length - 1);
     lines.forEach((line, index) => line.classList.toggle("is-active", index === activeIndex));
     section.style.setProperty("--manifest-grid", `${progress * -170}px`);
+    const isOrange = progress > 0.34 && progress <= 0.66;
+    section.classList.toggle("is-orange-bg", isOrange);
+    sticky.classList.toggle("is-orange-bg", isOrange);
+    section.setAttribute("data-bg-state", isOrange ? "orange" : "light");
     if (progress > 0.66) {
       sticky.style.background = "var(--sars-cream)";
       sticky.style.color = "var(--sars-ink)";
@@ -828,44 +837,44 @@ function initObjective() {
 }
 
 function initHorizontalServices() {
-  const section = document.querySelector(SELECTOR.horizontal);
+  const section = document.querySelector(SELECTOR.horizontal) || document.querySelector(".sars-services--scroll-showcase");
   if (!section) return;
   if (section.dataset.horizontalInitialized === "true") return;
   section.dataset.horizontalInitialized = "true";
   const track = section.querySelector(".sars-services__track");
-  const progress = section.querySelector(".sars-services__progress span");
   if (!track) return;
 
-  if (reducedMotion) {
-    section.classList.add("is-native-scroll");
-    section.style.setProperty("--services-orange", "1");
-    if (progress) progress.style.setProperty("--progress", "100%");
-    return;
-  }
+  // Restore smooth natural section flow (no scroll-lock / no 360svh sticky pinning)
+  section.classList.remove("is-scroll-driven");
+  section.classList.add("is-native-scroll");
+  track.style.transform = "";
 
-  section.classList.add("is-scroll-driven");
+  // Smooth drag-to-scroll interaction on desktop
+  let isDown = false;
+  let startX = 0;
+  let scrollLeft = 0;
 
-  function update() {
-    const amount = progressWithin(section);
-    const orangeAmount = amount > 0.78
-        ? (1 - amount) / 0.22
-        : 1;
-    section.style.setProperty("--services-orange", clamp(orangeAmount, 0, 1).toFixed(3));
+  track.addEventListener("mousedown", (e) => {
+    if (e.target.closest("a, button")) return;
+    isDown = true;
+    track.classList.add("is-dragging");
+    startX = e.pageX - track.offsetLeft;
+    scrollLeft = track.scrollLeft;
+  });
 
-    if (!desktop()) {
-      track.style.transform = "";
-      if (progress) progress.style.setProperty("--progress", "100%");
-      return;
-    }
-    const sectionWidth = section.getBoundingClientRect().width || window.innerWidth;
-    const maxX = Math.max(0, track.scrollWidth - sectionWidth);
-    track.style.transform = `translate3d(${-maxX * amount}px, 0, 0)`;
-    if (progress) progress.style.setProperty("--progress", `${Math.round(amount * 100)}%`);
-  }
+  window.addEventListener("mouseup", () => {
+    if (!isDown) return;
+    isDown = false;
+    track.classList.remove("is-dragging");
+  });
 
-  window.addEventListener("scroll", update, { passive: true });
-  window.addEventListener("resize", update);
-  update();
+  window.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    const walk = (x - startX) * 1.4;
+    track.scrollLeft = scrollLeft - walk;
+  });
 }
 
 function initStats() {

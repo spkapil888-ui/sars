@@ -1,16 +1,134 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const navItems = [
-  { label: "What We Do", href: "/services/" },
+interface SubService {
+  label: string;
+  href: string;
+}
+
+interface ServiceCategory {
+  title: string;
+  href: string;
+  subservices: SubService[];
+  specialized?: Array<{ title: string; href: string; desc: string }>;
+}
+
+interface MegaColumn {
+  title: string;
+  href: string;
+  items: Array<{ label: string; href: string }>;
+}
+
+const megaColumns: MegaColumn[] = [
+  {
+    title: "Digital Marketing",
+    href: "/digital-marketing",
+    items: [
+      { label: "SEO Services", href: "/digital-marketing/seo-services" },
+      { label: "Performance Marketing", href: "/digital-marketing/performance-marketing" },
+      { label: "Google Ads", href: "/digital-marketing/google-ads" },
+      { label: "Social Media Marketing", href: "/digital-marketing/social-media-marketing" },
+      { label: "Content Marketing", href: "/digital-marketing/content-marketing" },
+    ],
+  },
+  {
+    title: "AI & Automation",
+    href: "/ai-automation",
+    items: [
+      { label: "AI Agent Development", href: "/ai-automation/ai-agent-development" },
+      { label: "AI Chatbot Development", href: "/ai-automation/ai-chatbot-development" },
+      { label: "Workflow Automation", href: "/ai-automation/workflow-automation" },
+      { label: "Marketing Automation", href: "/ai-automation/marketing-automation" },
+      { label: "CRM Automation", href: "/ai-automation/crm-automation" },
+    ],
+  },
+  {
+    title: "Software Development",
+    href: "/software-development",
+    items: [
+      { label: "Web Development", href: "/software-development/web-development" },
+      { label: "Custom Software", href: "/software-development/custom-software" },
+      { label: "WordPress Development", href: "/software-development/wordpress-development" },
+      { label: "Shopify Development", href: "/software-development/shopify-development" },
+      { label: "React Development", href: "/software-development/react-development" },
+      { label: "API Development", href: "/software-development/api-development" },
+    ],
+  },
+  {
+    title: "Other Services",
+    href: "/services/",
+    items: [
+      { label: "UI/UX Design", href: "/ui-ux-design" },
+      { label: "Technology Consulting", href: "/technology-consulting" },
+      { label: "BPO Services", href: "/bpo-services" },
+      { label: "Customer Support Outsourcing", href: "/bpo-services/customer-support-outsourcing" },
+      { label: "Sales Outsourcing", href: "/bpo-services/sales-outsourcing" },
+      { label: "Technical Support Outsourcing", href: "/bpo-services/technical-support-outsourcing" },
+      { label: "Back Office Outsourcing", href: "/bpo-services/back-office-outsourcing" },
+    ],
+  },
+];
+
+const serviceGroups: ServiceCategory[] = [
+  {
+    title: "Digital Marketing",
+    href: "/digital-marketing",
+    subservices: [
+      { label: "SEO Services", href: "/digital-marketing/seo-services" },
+      { label: "Performance Marketing", href: "/digital-marketing/performance-marketing" },
+      { label: "Google Ads", href: "/digital-marketing/google-ads" },
+      { label: "Social Media Marketing", href: "/digital-marketing/social-media-marketing" },
+      { label: "Content Marketing", href: "/digital-marketing/content-marketing" },
+    ],
+  },
+  {
+    title: "AI & Automation",
+    href: "/ai-automation",
+    subservices: [
+      { label: "AI Agent Development", href: "/ai-automation/ai-agent-development" },
+      { label: "AI Chatbot Development", href: "/ai-automation/ai-chatbot-development" },
+      { label: "Workflow Automation", href: "/ai-automation/workflow-automation" },
+      { label: "Marketing Automation", href: "/ai-automation/marketing-automation" },
+      { label: "CRM Automation", href: "/ai-automation/crm-automation" },
+    ],
+  },
+  {
+    title: "Software Development",
+    href: "/software-development",
+    subservices: [
+      { label: "Web Development", href: "/software-development/web-development" },
+      { label: "Custom Software", href: "/software-development/custom-software" },
+      { label: "WordPress Development", href: "/software-development/wordpress-development" },
+      { label: "Shopify Development", href: "/software-development/shopify-development" },
+      { label: "React Development", href: "/software-development/react-development" },
+      { label: "API Development", href: "/software-development/api-development" },
+    ],
+  },
+  {
+    title: "BPO Services",
+    href: "/bpo-services",
+    subservices: [
+      { label: "Customer Support Outsourcing", href: "/bpo-services/customer-support-outsourcing" },
+      { label: "Sales Outsourcing", href: "/bpo-services/sales-outsourcing" },
+      { label: "Technical Support Outsourcing", href: "/bpo-services/technical-support-outsourcing" },
+      { label: "Back Office Outsourcing", href: "/bpo-services/back-office-outsourcing" },
+    ],
+    specialized: [
+      { title: "UI/UX Design", href: "/ui-ux-design", desc: "Product UX, design systems & CRO" },
+      { title: "Technology Consulting", href: "/technology-consulting", desc: "Cloud architecture & fractional CTO" },
+    ],
+  },
+];
+
+const mainNavLinks = [
   { label: "About Us", href: "/about/" },
   { label: "Work", href: "/work/" },
   { label: "Hire Talent", href: "/hire-talent/" },
-  { label: "BPO Services", href: "/bpo-services/" },
+  { label: "Industries", href: "/industries/" },
   { label: "Insights", href: "/insights/" },
   { label: "Contact", href: "/contact/" },
 ];
@@ -23,25 +141,72 @@ function isActive(pathname: string, href: string) {
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [megaOpen, setMegaOpen] = useState(false);
   const [isSolid, setIsSolid] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [isLight, setIsLight] = useState(true);
 
+  // Mobile accordion states
+  const [mobileWhatWeDoOpen, setMobileWhatWeDoOpen] = useState(false);
+  const [mobileOpenSection, setMobileOpenSection] = useState<string | null>(null);
+
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setMegaOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setMegaOpen(false);
+    }, 180);
+  };
+
   useEffect(() => {
     setMenuOpen(false);
+    setMegaOpen(false);
   }, [pathname]);
 
   useEffect(() => {
     document.body.classList.toggle("menu-open", menuOpen);
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        setMegaOpen(false);
+      }
+    };
+
+    const onClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        triggerRef.current &&
+        !triggerRef.current.contains(target) &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target)
+      ) {
+        setMegaOpen(false);
+      }
     };
 
     document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("mousedown", onClickOutside);
     return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
       document.body.classList.remove("menu-open");
       document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("mousedown", onClickOutside);
     };
   }, [menuOpen]);
 
@@ -90,6 +255,15 @@ export function SiteHeader() {
     .filter(Boolean)
     .join(" ");
 
+  const isWhatWeDoActive =
+    pathname.startsWith("/digital-marketing") ||
+    pathname.startsWith("/ai-automation") ||
+    pathname.startsWith("/software-development") ||
+    pathname.startsWith("/bpo-services") ||
+    pathname.startsWith("/ui-ux-design") ||
+    pathname.startsWith("/technology-consulting") ||
+    pathname.startsWith("/services");
+
   return (
     <>
       <header className={navClassName} data-nav>
@@ -105,7 +279,35 @@ export function SiteHeader() {
           </Link>
 
           <nav className="sars-nav__links" aria-label="Primary navigation">
-            {navItems.map((item) => (
+            {/* Desktop Services Trigger */}
+            <div
+              ref={triggerRef}
+              className={`sars-nav__item--dropdown${megaOpen ? " is-open" : ""}`}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <Link
+                href="/services/"
+                className={`sars-nav__dropdown-trigger${isWhatWeDoActive ? " is-active" : ""}`}
+                aria-expanded={megaOpen}
+                aria-haspopup="true"
+                aria-label="Services — View all services in single page"
+                onClick={() => setMegaOpen(false)}
+              >
+                <span>Services</span>
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M4 6L8 10L12 6"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
+            </div>
+
+            {mainNavLinks.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -132,29 +334,461 @@ export function SiteHeader() {
             <span />
           </button>
         </div>
+
+        {/* Desktop Full-Width Mega Menu Dropdown */}
+        <div
+          ref={dropdownRef}
+          className={`sars-mega-dropdown${megaOpen ? " is-open" : ""}`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          role="region"
+          aria-label="Services directory"
+        >
+          <div className="sars-mega-dropdown__inner">
+            <div className="sars-mega-grid">
+              {megaColumns.map((col) => (
+                <div key={col.title} className="sars-mega-col">
+                  <Link
+                    href={col.href}
+                    className="sars-mega-col__title"
+                    onClick={() => setMegaOpen(false)}
+                  >
+                    <span>{col.title}</span>
+                    <span className="sars-mega-col__arrow" aria-hidden="true">&rarr;</span>
+                  </Link>
+
+                  <ul className="sars-mega-list">
+                    {col.items.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          href={item.href}
+                          className="sars-mega-link"
+                          onClick={() => setMegaOpen(false)}
+                        >
+                          <span>{item.label}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            <div className="sars-mega-bottom">
+              <div className="sars-mega-bottom__text">
+                <span className="sars-mega-bottom__badge">Capabilities</span>
+                <span>Engineering, organic demand generation, AI automation and managed operations.</span>
+              </div>
+              <div className="sars-mega-bottom__links">
+                <Link
+                  href="/services/"
+                  className="sars-mega-bottom__cta"
+                  onClick={() => setMegaOpen(false)}
+                >
+                  All Services on Single Page &rarr;
+                </Link>
+                <Link
+                  href="/work/"
+                  className="sars-mega-bottom__cta-secondary"
+                  onClick={() => setMegaOpen(false)}
+                >
+                  Client Outcomes &rarr;
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </header>
 
+      {/* Mobile Drawer with Accordion Navigation */}
       <div
         className={`sars-menu${menuOpen ? " is-open" : ""}`}
         id="sars-menu"
         aria-hidden={!menuOpen}
-        onClick={(event) => {
-          if ((event.target as Element).closest("a")) setMenuOpen(false);
-        }}
       >
         <div className="sars-menu__inner">
           <nav className="sars-menu__links" aria-label="Full screen navigation">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={isActive(pathname, item.href) ? "page" : undefined}
-                onClick={() => setMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {/* Mobile Services Accordion Group */}
+            <div className={`sars-menu__group${mobileWhatWeDoOpen ? " is-open" : ""}`}>
+              <div className="sars-menu__group-header">
+                <Link
+                  href="/services/"
+                  className="sars-menu__group-link"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Services
+                </Link>
+                <button
+                  type="button"
+                  className="sars-menu__group-btn-toggle"
+                  onClick={() => setMobileWhatWeDoOpen((prev) => !prev)}
+                  aria-expanded={mobileWhatWeDoOpen}
+                  aria-label="Toggle Services submenu"
+                >
+                  <span className="text-xl font-mono text-[#e5532c]">
+                    {mobileWhatWeDoOpen ? "−" : "+"}
+                  </span>
+                </button>
+              </div>
+
+              <div className="sars-menu__group-content">
+                <div className="py-2 mb-2">
+                  <Link
+                    href="/services/"
+                    className="sars-menu__all-services-link"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <span>All Services on Single Page</span>
+                    <span aria-hidden="true">&rarr;</span>
+                  </Link>
+                </div>
+                {/* 1. Digital Marketing */}
+                <div
+                  className={`sars-menu__subgroup${
+                    mobileOpenSection === "digital-marketing" ? " is-open" : ""
+                  }`}
+                >
+                  <div className="sars-menu__subgroup-header">
+                    <Link
+                      href="/digital-marketing"
+                      className="sars-menu__subgroup-title"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Digital Marketing
+                    </Link>
+                    <button
+                      type="button"
+                      className="sars-menu__subgroup-toggle"
+                      aria-label="Toggle Digital Marketing subservices"
+                      onClick={() =>
+                        setMobileOpenSection((prev) =>
+                          prev === "digital-marketing" ? null : "digital-marketing",
+                        )
+                      }
+                    >
+                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                        <path
+                          d="M4 6L8 10L12 6"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="sars-menu__nested-links">
+                    <Link
+                      href="/digital-marketing/seo-services"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      SEO Services
+                    </Link>
+                    <Link
+                      href="/digital-marketing/performance-marketing"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Performance Marketing
+                    </Link>
+                    <Link
+                      href="/digital-marketing/google-ads"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Google Ads
+                    </Link>
+                    <Link
+                      href="/digital-marketing/social-media-marketing"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Social Media Marketing
+                    </Link>
+                    <Link
+                      href="/digital-marketing/content-marketing"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Content Marketing
+                    </Link>
+                  </div>
+                </div>
+
+                {/* 2. AI & Automation */}
+                <div
+                  className={`sars-menu__subgroup${
+                    mobileOpenSection === "ai-automation" ? " is-open" : ""
+                  }`}
+                >
+                  <div className="sars-menu__subgroup-header">
+                    <Link
+                      href="/ai-automation"
+                      className="sars-menu__subgroup-title"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      AI & Automation
+                    </Link>
+                    <button
+                      type="button"
+                      className="sars-menu__subgroup-toggle"
+                      aria-label="Toggle AI & Automation subservices"
+                      onClick={() =>
+                        setMobileOpenSection((prev) =>
+                          prev === "ai-automation" ? null : "ai-automation",
+                        )
+                      }
+                    >
+                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                        <path
+                          d="M4 6L8 10L12 6"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="sars-menu__nested-links">
+                    <Link
+                      href="/ai-automation/ai-agent-development"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      AI Agent Development
+                    </Link>
+                    <Link
+                      href="/ai-automation/ai-chatbot-development"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      AI Chatbot Development
+                    </Link>
+                    <Link
+                      href="/ai-automation/workflow-automation"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Workflow Automation
+                    </Link>
+                    <Link
+                      href="/ai-automation/marketing-automation"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Marketing Automation
+                    </Link>
+                    <Link
+                      href="/ai-automation/crm-automation"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      CRM Automation
+                    </Link>
+                  </div>
+                </div>
+
+                {/* 3. Software Development */}
+                <div
+                  className={`sars-menu__subgroup${
+                    mobileOpenSection === "software-development" ? " is-open" : ""
+                  }`}
+                >
+                  <div className="sars-menu__subgroup-header">
+                    <Link
+                      href="/software-development"
+                      className="sars-menu__subgroup-title"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Software Development
+                    </Link>
+                    <button
+                      type="button"
+                      className="sars-menu__subgroup-toggle"
+                      aria-label="Toggle Software Development subservices"
+                      onClick={() =>
+                        setMobileOpenSection((prev) =>
+                          prev === "software-development" ? null : "software-development",
+                        )
+                      }
+                    >
+                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                        <path
+                          d="M4 6L8 10L12 6"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="sars-menu__nested-links">
+                    <Link
+                      href="/software-development/web-development"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Web Development
+                    </Link>
+                    <Link
+                      href="/software-development/custom-software"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Custom Software
+                    </Link>
+                    <Link
+                      href="/software-development/wordpress-development"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      WordPress Development
+                    </Link>
+                    <Link
+                      href="/software-development/shopify-development"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Shopify Development
+                    </Link>
+                    <Link
+                      href="/software-development/react-development"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      React Development
+                    </Link>
+                    <Link
+                      href="/software-development/api-development"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      API Development
+                    </Link>
+                  </div>
+                </div>
+
+                {/* 4. UI/UX Design (Parent direct link) */}
+                <div className="py-2">
+                  <Link
+                    href="/ui-ux-design"
+                    className="sars-menu__subgroup-title block text-lg"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    UI/UX Design
+                  </Link>
+                </div>
+
+                {/* 5. Technology Consulting (Parent direct link) */}
+                <div className="py-2">
+                  <Link
+                    href="/technology-consulting"
+                    className="sars-menu__subgroup-title block text-lg"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Technology Consulting
+                  </Link>
+                </div>
+
+                {/* 6. BPO Services */}
+                <div
+                  className={`sars-menu__subgroup${
+                    mobileOpenSection === "bpo-services" ? " is-open" : ""
+                  }`}
+                >
+                  <div className="sars-menu__subgroup-header">
+                    <Link
+                      href="/bpo-services"
+                      className="sars-menu__subgroup-title"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      BPO Services
+                    </Link>
+                    <button
+                      type="button"
+                      className="sars-menu__subgroup-toggle"
+                      aria-label="Toggle BPO Services subservices"
+                      onClick={() =>
+                        setMobileOpenSection((prev) =>
+                          prev === "bpo-services" ? null : "bpo-services",
+                        )
+                      }
+                    >
+                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                        <path
+                          d="M4 6L8 10L12 6"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="sars-menu__nested-links">
+                    <Link
+                      href="/bpo-services/customer-support-outsourcing"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Customer Support Outsourcing
+                    </Link>
+                    <Link
+                      href="/bpo-services/sales-outsourcing"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Sales Outsourcing
+                    </Link>
+                    <Link
+                      href="/bpo-services/technical-support-outsourcing"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Technical Support Outsourcing
+                    </Link>
+                    <Link
+                      href="/bpo-services/back-office-outsourcing"
+                      className="sars-menu__sublink"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Back Office Outsourcing
+                    </Link>
+                  </div>
+                </div>
+
+                {/* All Services Overview link */}
+                <div className="pt-3 border-t border-white/10 mt-2">
+                  <Link
+                    href="/services/"
+                    className="text-xs font-semibold text-[#e5532c] hover:underline inline-flex items-center gap-1"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    View All Services Overview &rarr;
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {mainNavLinks.map((item) => {
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={active ? "is-active" : undefined}
+                  aria-current={active ? "page" : undefined}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
+
           <aside className="sars-menu__aside">
             <p>
               <strong>Work with us</strong>
@@ -162,8 +796,8 @@ export function SiteHeader() {
             </p>
             <p>
               <strong>Capabilities</strong>
-              Marketing, film production, product design, software, AI automation,
-              BPO services and consulting.
+              Marketing, custom software development, AI automation, product design,
+              BPO operations and technology consulting.
             </p>
           </aside>
         </div>
